@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Đã xong</title>
+<style>
+:root{--bg:#f6f5f0;--fg:#1c1c1a;--card:#fff;--ac:#1d9e75;--mu:#76756f;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#161615;--fg:#eeeee9;--card:#232321;--ac:#3ccf9d;--mu:#9a9992}}
+:root[data-theme="dark"]{--bg:#161615;--fg:#eeeee9;--card:#232321;--ac:#3ccf9d;--mu:#9a9992}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:var(--bg);color:var(--fg);font:16px/1.4 system-ui,sans-serif}
+main{max-width:480px;margin:0 auto;padding:20px 16px}
+h1{font-size:15px;color:var(--mu);font-weight:500;margin:0}
+#n{font-size:96px;font-weight:700;color:var(--ac);line-height:1.1;margin:4px 0 16px}
+.row{display:flex;gap:8px}
+input{flex:1;min-width:0;padding:14px;border-radius:12px;border:1px solid var(--mu);background:var(--card);color:var(--fg);font-size:16px}
+button{padding:14px 18px;border:0;border-radius:12px;background:var(--ac);color:#fff;font-size:16px;font-weight:600}
+ul{list-style:none;padding:0;margin:20px 0 0}
+li{background:var(--card);border-radius:12px;padding:12px 14px;margin-bottom:8px;display:flex;justify-content:space-between;gap:10px}
+small{color:var(--mu);white-space:nowrap}
+</style>
+</head>
+<body>
+<main>
+<h1>Số thứ bạn ĐÃ LÀM XONG</h1>
+<div id="n">0</div>
+<div class="row"><input id="t" placeholder="Hôm nay mình xong việc gì?"><button id="b">Xong</button></div>
+<ul id="l"></ul>
+</main>
+<script>
+var items=[];
+try{items=JSON.parse(localStorage.getItem("dx")||"[]")}catch(e){items=[]}
+function save(){try{localStorage.setItem("dx",JSON.stringify(items))}catch(e){}}
+function esc(s){var d=document.createElement("div");d.textContent=s;return d.innerHTML}
+function draw(){
+document.getElementById("n").textContent=items.length;
+document.getElementById("l").innerHTML=items.map(function(i){return "<li><span>"+esc(i.t)+"</span><small>"+i.d+"</small></li>"}).join("");
+}
+function add(){
+var el=document.getElementById("t"),v=el.value.trim();
+if(!v)return;
+var now=new Date();
+items.unshift({t:v,d:now.getDate()+"/"+(now.getMonth()+1)+" "+now.getHours()+":"+String(now.getMinutes()).padStart(2,"0")});
+el.value="";save();draw();
+}
+document.getElementById("b").onclick=add;
+document.getElementById("t").onkeydown=function(e){if(e.key==="Enter")add()};
+draw();
+</script>
+</body>
+</html>
